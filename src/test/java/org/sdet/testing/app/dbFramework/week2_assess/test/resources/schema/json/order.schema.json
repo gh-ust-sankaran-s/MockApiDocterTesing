@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "orderNumber",
+      "userId",
+      "ownerKey"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "orderNumber": {
+        "type": "string"
+      },
+      "userId": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "ownerKey": {
+        "type": "string"
+      },
+      "placedOn": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+
+        "enum": [
+          "CREATED",
+          "ALLOCATED",
+          "SHIPPED"
+        ]
+      },
+      "payment": {
+        "type": "string"
+      },
+      "paymentMethod": {
+        "type": "string"
+      },
+      "channel": {
+        "type": "string"
+      },
+      "items": {
+        "type": "array",
+        "required": [
+          "id",
+          "orderNumber",
+          "userId",
+          "ownerKey"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "userId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ownerKey": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "size": {
+            "type": "string",
+            "minlength": 0
+          },
+          "color": {
+            "type": "string"
+          },
+          "fulfilment": {
+            "type": "string"
+          },
+          "product": {
+            "type": "array",
+            "required": [
+              "id",
+              "name",
+              "category",
+              "price",
+              "stock"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "Footwear",
+                  "Bags",
+                  "Electronics",
+                  "Fitness",
+                  "Apparel",
+                  "Workspace",
+                  "Grocery",
+                  "Home",
+                  "Beauty"
+                ]
+              },
+              "price": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "stock": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "brand": {
+                "type": "string"
+              },
+              "sku": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "additionalProperties": true
+  }
+}
