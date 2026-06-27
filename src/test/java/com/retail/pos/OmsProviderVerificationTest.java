@@ -5,7 +5,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 @Provider("oms-provider")
-@PactBroker(url = "http://127.0.0.1:9292")
+@PactFolder("target/pacts")
 public class OmsProviderVerificationTest {
 
     @RegisterExtension
@@ -45,26 +45,107 @@ public class OmsProviderVerificationTest {
 
     @State("order 123 exists")
     void orderExists() {
-        System.out.println("Order 123 exist");
-    }
 
+        wireMock.stubFor(
+                get(urlEqualTo("/orders/123"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader(
+                                                "Content-Type",
+                                                "application/json")
+                                        .withBody("""
+                                                {
+                                                  "id": 123,
+                                                  "status": "CONFIRMED",
+                                                  "total": 42.0
+                                                }
+                                                """)
+                        )
+        );
+    }
 
     @State("inventory available for SKU-9")
     void inventoryAvailable() {
-        System.out.println("inventory available for SKU-9");
+
+        wireMock.stubFor(
+                post(urlEqualTo("/orders"))
+                        .withHeader(
+                                "Content-Type",
+                                matching("application/json.*"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(201)
+                                        .withHeader(
+                                                "Content-Type",
+                                                "application/json")
+                                        .withHeader(
+                                                "Location",
+                                                "/orders/777")
+                                        .withBody("""
+                                                {
+                                                  "id": 777,
+                                                  "status": "PENDING"
+                                                }
+                                                """)
+                        )
+        );
     }
 
     @State("order 123 exists and Update order")
     void orderUpdate() {
-        System.out.println("order 123 exists and Update order");
+
+        wireMock.stubFor(
+                put(urlEqualTo("/orders/123/status"))
+                        .withHeader(
+                                "Content-Type",
+                                matching("application/json.*"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader(
+                                                "Content-Type",
+                                                "application/json")
+                                        .withBody("""
+                                                {
+                                                  "id": 123,
+                                                  "status": "SHIPPED"
+                                                }
+                                                """)
+                        )
+        );
     }
+
     @State("SKU-9 has stock")
     void skuHasStock() {
-        System.out.println("SKU-9 has stock");
+
+        wireMock.stubFor(
+                get(urlEqualTo("/inventory/SKU-9"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader(
+                                                "Content-Type",
+                                                "application/json")
+                                        .withBody("""
+                                                {
+                                                  "sku": "SKU-9",
+                                                  "qty": 5
+                                                }
+                                                """)
+                        )
+        );
     }
+
     @State("order 123 exists and can be cancelled")
-    void  orderCancel()
-    {
-        System.out.println("order 123 exists and can be cancelled");
+    void orderCancel() {
+
+        wireMock.stubFor(
+                delete(urlEqualTo("/orders/123"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(204)
+                        )
+        );
     }
 }
