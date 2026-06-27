@@ -5,6 +5,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -18,7 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 @Provider("oms-provider")
-@PactFolder("target/pacts")
+@PactBroker(
+        url = "http://127.0.0.1:9292"
+)
 public class OmsProviderVerificationTest {
 
     @RegisterExtension
