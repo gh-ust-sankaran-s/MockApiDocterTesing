@@ -45,92 +45,26 @@ public class OmsProviderVerificationTest {
 
     @State("order 123 exists")
     void orderExists() {
-        wireMock.stubFor(
-                get(urlEqualTo("/order/123"))
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader("Content-Type", "application/json")
-                                        .withBody("""
-                                                {
-                                                  "orderId": 123,
-                                                  "status": "CONFIRMED",
-                                                  "total": 42.0
-                                                }
-                                                """)
-                        )
-        );
+        System.out.println("Order 123 exist");
     }
+
 
     @State("inventory available for SKU-9")
     void inventoryAvailable() {
-        wireMock.stubFor(
-                get(urlEqualTo("/inventory/SKU-9"))
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader("Content-Type", "application/json")
-                                        .withBody("""
-                                                {
-                                                  "sku": "SKU-9",
-                                                  "qty": 5
-                                                }
-                                                """)
-                        )
-        );
+        System.out.println("inventory available for SKU-9");
     }
 
     @State("order 123 exists and Update order")
     void orderUpdate() {
-        wireMock.stubFor(
-                put(urlEqualTo("/order/123"))
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader("Content-Type", "application/json")
-                                        .withBody("""
-                                                {
-                                                  "orderId": 123,
-                                                  "status": "UPDATED"
-                                                }
-                                                """)
-                        )
-        );
+        System.out.println("order 123 exists and Update order");
     }
-
     @State("SKU-9 has stock")
     void skuHasStock() {
-        wireMock.stubFor(
-                get(urlEqualTo("/inventory/SKU-9"))
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader("Content-Type", "application/json")
-                                        .withBody("""
-                                                {
-                                                  "sku": "SKU-9",
-                                                  "qty": 10
-                                                }
-                                                """)
-                        )
-        );
+        System.out.println("SKU-9 has stock");
     }
-
     @State("order 123 exists and can be cancelled")
-    void orderCancel() {
-        wireMock.stubFor(
-                delete(urlEqualTo("/order/123"))
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader("Content-Type", "application/json")
-                                        .withBody("""
-                                                {
-                                                  "orderId": 123,
-                                                  "status": "CANCELLED"
-                                                }
-                                                """)
-                        )
-        );
+    void  orderCancel()
+    {
+        System.out.println("order 123 exists and can be cancelled");
     }
 }
